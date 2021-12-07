@@ -37,10 +37,26 @@ const writeCounter = (count, callback) => {
 };
 
 // Public API - Fix this function //////////////////////////////////////////////
+// Rewrite using readCounter and writeCounter helper functions so data persists
+exports.getNextUniqueId = (callback) => {
+  // read counter
+  readCounter((err, fileData)=> {
+    // if error
+    if (err) {
+      // stop
+      console.log(err);
+      return;
+    // otherwise
+    } else {
+      // perform operation
+      writeCounter(fileData + 1, callback);
+    }
+  });
+  // perform operation for adding counter
+  // write counter for next padded number
 
-exports.getNextUniqueId = () => {
-  counter = counter + 1;
-  return zeroPaddedNumber(counter);
+  // counter = counter + 1;
+  // return zeroPaddedNumber(counter);
 };
 
 

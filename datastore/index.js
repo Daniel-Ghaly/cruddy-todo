@@ -4,26 +4,33 @@ const _ = require('underscore');
 const counter = require('./counter');
 
 var items = {};
-var targetDir = path.join(__dirname, 'data');
 
 // Public API - Fix these CRUD functions ///////////////////////////////////////
-debugger;
+
 // Refactor: EACH NEW TODO ENTRY MUST BE SAVED IN IT'S OWN FILE
 exports.create = (text, callback) => {
   // Use id here to create a file path inside dataDir (will be created if it doesn't exist)
-  var id = counter.getNextUniqueId(callback);
-  items[id] = text;
-  // id = Buffer.from(id);
-
-  var path = Buffer.from(targetDir + '/' + id + '.txt');
-  fs.writeFile(path, items[id], (err) => {
-    if (err) {
+  counter.getNextUniqueId((error, id) => {
+    // debugger;
+    // var path = `${exports.dataDir}/${id}.txt`;
+    // fs.writeFile([file], [data], [options], [callback]) <= Params
+    if (error) {
       console.log('error');
-      return;
     } else {
-      callback(null, { id, text });
+      var path = exports.dataDir + '/' + id + '.txt';
+      fs.writeFile(path, text, (error) => {
+        if (error) {
+          console.log('error');
+          return;
+        } else {
+          // console.log('file written successfully', counterString, text);
+          callback(null, { id, text });
+          // debugger;
+        }
+      });
     }
   });
+
   // Each time a POST is made to the collection route, save a file with the todo item in the dataDir folder
   // ONLY SAVE THE TODO TEXTIN THE FILE, the id is encoded into its filename
   // DO NOT STORE AN OBJECT
@@ -33,7 +40,7 @@ exports.create = (text, callback) => {
   // The number of files in dataDir directory increases each time a new todo is created
   // The contents of each file contain ONLY THE TEXT of that todo item  (remember, we aren't storing objects)
 };
-//[] commit: "Copmlete creating ToDos"
+//[] commit: "Complete creating ToDos"
 
 
 // Refactor: RETURN ARRAY OF TODOS TO CLIENT APP WHENEVER A GET REQUEST TO THE COLLECTION ROUTE OCCURS
@@ -52,6 +59,8 @@ exports.readAll = (callback) => {
    * the message's id (from the filename) for both the id field and the text field. It will have the
    * effect of changing the presentation of your todo items for the time being.
    */
+
+  //fs.readFile([path], [callback])
 };
 // [] commit "Complete retrieving all todos"
 

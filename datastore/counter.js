@@ -45,11 +45,6 @@ exports.getNextUniqueId = (cb) => {
       cb(err, counterString);
     });
   });
-  // perform operation for adding counter
-  // write counter for next padded number
-
-  // counter = counter + 1;
-  // return zeroPaddedNumber(counter);
 };
 
 

@@ -91,10 +91,8 @@ exports.readOne = (id, callback) => {
   // } else {
   //   callback(null, { id, text });
   // }
+
   var path = exports.dataDir + '/';
-  // if (err) {
-  //   console.log('error');
-  // } else {
   fs.readdir(path, (err, files) => {
     if (err) {
       console.log(err);
@@ -120,21 +118,46 @@ exports.readOne = (id, callback) => {
       }
     }
   });
-  // }
-  // Will be correct when you click edit on the UI, you'll see the todo text in the popup window
 };
+// Will be correct when you click edit on the UI, you'll see the todo text in the popup window
 // [] commit "Complete retrieving one todo"
 
 // Refactor: REWRITE THE TODO ITEM STORED IN THE dataDir BASED ON IT'S id
 exports.update = (id, text, callback) => {
-  var item = items[id];
-  if (!item) {
-    callback(new Error(`No item with id: ${id}`));
-  } else {
-    items[id] = text;
-    callback(null, { id, text });
-  }
+  // var item = items[id];
+  // if (!item) {
+  //   callback(new Error(`No item with id: ${id}`));
+  // } else {
+  //   items[id] = text;
+  //   callback(null, { id, text });
+  // }
 
+  var path = exports.dataDir + '/';
+  fs.readdir(path, (err, files) => {
+    if (err) {
+      console.log(err);
+    } else {
+      if (!files.includes(id + '.txt')) {
+        callback(new Error(`No item with id: ${id}`));
+      } else {
+        files.forEach( (file) => {
+          var identifier = file.replace('.txt', '');
+          if (identifier === id) {
+            fs.writeFile(exports.dataDir + '/' + file, text, (error) => {
+              debugger;
+              if (error) {
+                console.error('nope');
+                debugger;
+              } else {
+                callback(null);
+                debugger;
+              }
+            });
+          }
+        });
+      }
+    }
+  });
   // Will be correct when you're able to save the edited todo item and
   // upon subsequent clicks of the edit button, the changes will persist
   // Should also confirm the counter isn't changing between updates.

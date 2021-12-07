@@ -58,7 +58,6 @@ exports.readAll = (callback) => {
         return {id: identifier, text: identifier};
       }); // returns ['00001', '00002']
       callback(null, array); // files // ['00001.txt', '00002.txt'] // [{ id: '00001', text: '00001'}, {id: '00002', text: '00002'}]
-      debugger;
     }
   });
 
@@ -84,14 +83,44 @@ exports.readAll = (callback) => {
 
 // Refactor: READ A TODO ITEM FROM THE dataDir BASED ON THE MESSAGE'S ID
 exports.readOne = (id, callback) => {
-  // Must read teh contents of the todo item file and respond with it to the client
-  var text = items[id];
-  if (!text) {
-    callback(new Error(`No item with id: ${id}`));
-  } else {
-    callback(null, { id, text });
-  }
-
+  // Must read the contents of the todo item file and respond with it to the client
+  // console.log(id);
+  // var text = items[id];
+  // if (!text) {
+  //   callback(new Error(`No item with id: ${id}`));
+  // } else {
+  //   callback(null, { id, text });
+  // }
+  var path = exports.dataDir + '/';
+  // if (err) {
+  //   console.log('error');
+  // } else {
+  fs.readdir(path, (err, files) => {
+    if (err) {
+      console.log(err);
+    } else {
+      if (!files.includes(id + '.txt')) {
+        callback(new Error(`No item with id: ${id}`));
+      } else {
+        files.forEach( (file) => {
+          var identifier = file.replace('.txt', '');
+          if (identifier === id) {
+            fs.readFile(exports.dataDir + '/' + file, (error, data) => {
+              debugger;
+              if (error) {
+                console.error('nope');
+                debugger;
+              } else {
+                callback(null, { id, text: data.toString() } );
+                debugger;
+              }
+            });
+          }
+        });
+      }
+    }
+  });
+  // }
   // Will be correct when you click edit on the UI, you'll see the todo text in the popup window
 };
 // [] commit "Complete retrieving one todo"

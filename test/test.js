@@ -20,12 +20,12 @@ const cleanTestDatastore = () => {
     todo => fs.unlinkSync(path.join(todos.dataDir, todo))
   );
 };
-
 describe('getNextUniqueId', () => {
   before(initializeTestFiles);
   beforeEach(initializeTestCounter);
   beforeEach(cleanTestDatastore);
 
+  // debugger;
   it('should use error first callback pattern', (done) => {
     counter.getNextUniqueId((err, id) => {
       expect(err).to.be.null;

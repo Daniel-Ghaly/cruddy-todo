@@ -46,10 +46,28 @@ exports.create = (text, callback) => {
 // Refactor: RETURN ARRAY OF TODOS TO CLIENT APP WHENEVER A GET REQUEST TO THE COLLECTION ROUTE OCCURS
 exports.readAll = (callback) => {
   // read dataDir directory and build a list of files. The id of each todo is encoded in its filename
-  var data = _.map(items, (text, id) => {
-    return { id, text };
+
+  var path = exports.dataDir + '/';
+  fs.readdir(path, (err, files) => {
+    if (err) {
+      console.log('error');
+      return;
+    } else {
+      var array = files.map( (file) => {
+        let identifier = file.replace('.txt', '');
+        return {id: identifier, text: identifier};
+      }); // returns ['00001', '00002']
+      callback(null, array); // files // ['00001.txt', '00002.txt'] // [{ id: '00001', text: '00001'}, {id: '00002', text: '00002'}]
+      debugger;
+    }
   });
-  callback(null, data);
+
+
+
+  // var data = _.map(items, (text, id) => {
+  //   return { id, text };
+  // });
+  // callback(null, data);
 
   /**
    * Do not attempt to read the contents of each file that contains the todo item text. This will send
@@ -60,7 +78,7 @@ exports.readAll = (callback) => {
    * effect of changing the presentation of your todo items for the time being.
    */
 
-  //fs.readFile([path], [callback])
+  //fs.readdir([path], [callback]) <= returns array of filenames
 };
 // [] commit "Complete retrieving all todos"
 

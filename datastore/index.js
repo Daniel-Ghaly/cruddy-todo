@@ -167,17 +167,50 @@ exports.update = (id, text, callback) => {
 
 // Refactor: REMOVE THE TODO FILE STORED IN dataDir BASED ON GIVEN id
 exports.delete = (id, callback) => {
-  var item = items[id];
-  delete items[id];
-  if (!item) {
-    // report an error if item not found
-    callback(new Error(`No item with id: ${id}`));
-  } else {
-    callback();
-  }
-  // Will be correct when you refresh the page, the delete todo item will not
-  // be present
+//   var item = items[id];
+//   delete items[id];
+//   if (!item) {
+//     // report an error if item not found
+//     callback(new Error(`No item with id: ${id}`));
+//   } else {
+//     callback();
+//   }
+//   // Will be correct when you refresh the page, the delete todo item will not
+//   // be present
+// };
+
+  var path = exports.dataDir + '/';
+  fs.readdir(path, (err, files) => {
+    if (err) {
+      console.log(err);
+    } else {
+      if (!files.includes(id + '.txt')) {
+        callback(new Error(`No item with id: ${id}`));
+      } else {
+        files.forEach( (file) => {
+          var identifier = file.replace('.txt', '');
+          if (identifier === id) {
+            fs.rm(exports.dataDir + '/' + file, (error) => {
+              if (error) {
+                console.error('nope');
+              } else {
+                callback(null);
+                debugger;
+              }
+            });
+          }
+        });
+      }
+    }
+  });
+  // Will be correct when you're able to save the edited todo item and
+  // upon subsequent clicks of the edit button, the changes will persist
+  // Should also confirm the counter isn't changing between updates.
+  // Refreshing the page should also show the updated todo
 };
+
+
+
 // [] commit "Complete deleting a todo"
 
 // Learn about promises by completing the BMR in Promises course on Learn. Then come back and complete readAll refactor (below)I

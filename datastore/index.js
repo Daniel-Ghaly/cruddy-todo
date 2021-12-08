@@ -55,6 +55,9 @@ exports.readAll = (callback) => {
     } else {
       var array = files.map( (file) => {
         let identifier = file.replace('.txt', '');
+        fs.readFile(`${path}${file}`, (error, data) {
+
+        });
         return {id: identifier, text: identifier};
       }); // returns ['00001', '00002']
       callback(null, array); // files // ['00001.txt', '00002.txt'] // [{ id: '00001', text: '00001'}, {id: '00002', text: '00002'}]
@@ -195,7 +198,6 @@ exports.delete = (id, callback) => {
                 console.error('nope');
               } else {
                 callback(null);
-                debugger;
               }
             });
           }
